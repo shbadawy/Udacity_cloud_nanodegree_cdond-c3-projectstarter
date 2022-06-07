@@ -199,7 +199,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apt-get install -y tar gzip 
+            sudo apt-get install -y tar gzip 
       - run:
           name: Configure server
           command: |

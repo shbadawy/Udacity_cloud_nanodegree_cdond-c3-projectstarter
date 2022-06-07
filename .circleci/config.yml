@@ -167,28 +167,25 @@ jobs:
             - project/.circleci/ansible/inventory.txt
       - destroy-environment
       
-#   configure-infrastructure:
-#     docker:
-#       - image: ansible/ansible:ubuntu1604py3
-#     steps:
-#       - checkout
-#       - add_ssh_keys:
-#           fingerprints:
-#             - "5e:60:55:3e:08:ef:9c:8d:2d:ed:f3:79:3a:87:34:25"
-#       - persist_to_workspace:
-#           root: ~/
-#           paths:
-#             - project/.circleci/ansible/inventory.txt
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             apt-get install -y tar gzip ansible awscli 
-#       - run:
-#           name: Configure server
-#           command: |
-#             cd .circleci/ansible
-#             ansible-playbook -i inventory.txt configure-server.yml
-#       # Here's where you will add some code to rollback on failure  
+  configure-infrastructure:
+    docker:
+      - image: ansible/ansible:ubuntu1604py3
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["5e:60:55:3e:08:ef:9c:8d:2d:ed:f3:79:3a:87:34:25"]
+      - persist_to_workspace:
+          root: ~/
+      - run:
+          name: Install dependencies
+          command: |
+            apt-get install -y tar gzip ansible awscli 
+      - run:
+          name: Configure server
+          command: |
+            cd .circleci/ansible
+            ansible-playbook -i inventory.txt configure-server.yml
+      - destroy-environment
 
 workflows:
   default:
@@ -208,5 +205,5 @@ workflows:
           filters:
             branches:
               only: [master]
-#       - configure-infrastructure:
-#           requires: [deploy-infrastructure]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]

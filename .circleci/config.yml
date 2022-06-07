@@ -200,7 +200,7 @@ jobs:
           name: Install dependencies
           command: |
             sudo apt-get install -y tar gzip 
-      - run:
+      - run: 
           name: Configure server
           command: |
             cd .circleci/ansible

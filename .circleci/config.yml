@@ -178,6 +178,7 @@ jobs:
       - image: ansible/ansible:ubuntu1604py3
     steps:
       - checkout
+      - install_awscli
       - add_ssh_keys:
           fingerprints: ["5e:60:55:3e:08:ef:9c:8d:2d:ed:f3:79:3a:87:34:25"]
       - persist_to_workspace:
@@ -187,7 +188,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apt-get install -y tar gzip ansible awscli 
+            apt-get install -y tar gzip 
       - run:
           name: Configure server
           command: |

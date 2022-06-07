@@ -153,9 +153,10 @@ jobs:
           name: Add back-end ip to ansible inventory
           command: |
              aws --region us-east-1 ec2 describe-instances \
-             --filters "Name=tag-value,Values="backend-${CIRCLE_WORKFLOW_ID:0:7}"" \
+             --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
              --query "Reservations[*].Instances[*].[PublicIpAddress]" \
              --output text >> .circleci/ansible/inventory.txt
+             cat .circleci/ansible/inventory.txt
              
       - persist_to_workspace:
           root: ~/
@@ -164,28 +165,29 @@ jobs:
       - destroy-environment
       # Here's where you will add some code to rollback on failure 
       
-  configure-infrastructure:
-    docker:
-      - image: ansible/ansible:ubuntu1604py3
-    steps:
-      - checkout
-      - add_ssh_keys:
-          fingerprints:
-            - "5e:60:55:3e:08:ef:9c:8d:2d:ed:f3:79:3a:87:34:25"
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - project/.circleci/ansible/inventory.txt
-      - run:
-          name: Install dependencies
-          command: |
-            apt-get install -y tar gzip ansible awscli 
-      - run:
-          name: Configure server
-          command: |
-            cd .circleci/ansible
-            ansible-playbook -i inventory.txt configure-server.yml
-      # Here's where you will add some code to rollback on failure  
+#   configure-infrastructure:
+#     docker:
+#       - image: ansible/ansible:ubuntu1604py3
+#     steps:
+#       - checkout
+#       - add_ssh_keys:
+#           fingerprints:
+#             - "5e:60:55:3e:08:ef:9c:8d:2d:ed:f3:79:3a:87:34:25"
+#       - persist_to_workspace:
+#           root: ~/
+#           paths:
+#             - project/.circleci/ansible/inventory.txt
+#       - run:
+#           name: Install dependencies
+#           command: |
+#             apt-get install -y tar gzip ansible awscli 
+#       - run:
+#           name: Configure server
+#           command: |
+#             cd .circleci/ansible
+#             ansible-playbook -i inventory.txt configure-server.yml
+#       # Here's where you will add some code to rollback on failure  
+
 workflows:
   default:
     jobs:
@@ -204,5 +206,5 @@ workflows:
 #           filters:
 #             branches:
 #               only: [test-feature-branch]
-      - configure-infrastructure:
-          requires: [deploy-infrastructure]
+#       - configure-infrastructure:
+#           requires: [deploy-infrastructure]

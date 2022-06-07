@@ -1,6 +1,12 @@
 version: 2.1
 
 commands:
+  install_awscli:
+    steps:
+      - run:
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     parameters:
@@ -15,24 +21,24 @@ commands:
             aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.WorkflowID >>
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.WorkflowID >>
             aws s3 rm s3://udapeople-<< parameters.WorkflowID >> --recursive
-  # revert-migrations:
-  #   description: Revert the last migration if successfully run in the current workflow.
-  #   parameters:
-  #     # Add parameter here     
-  #   steps:
-  #     - run:
-  #         name: Revert migrations
-  #         # Add when this will run
-  #         command: |
-  #           # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-  #           SUCCESS = 1
-  #           if(( $SUCCESS==1 )); 
-  #           then
-  #           #  cd ~/project/backend
-  #           #  npm install
-  #           #  Add revert code here. You can find this in the Getting Started section.
-  #             exit 1
-  #           fi
+  revert-migrations:
+    description: Revert the last migration if successfully run in the current workflow.
+    parameters:
+      WorkflowID:
+        type: string
+        default: ${CIRCLE_WORKFLOW_ID:0:7}
+    steps:
+      - run:
+          name: Revert migrations
+          when: on_fail
+          command: |
+            SUCCESS =$(curl --insecure https://kvdb.io/${KVDB_BUCKET}/migration_<< parameters.WorkflowID >> -d '1')
+            if(( $SUCCESS==1 )); 
+            then
+              cd ~/project/backend
+              npm install
+              npm run migration:revert
+            fi
 
 jobs:
   build-frontend:
@@ -194,6 +200,7 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - install_awscli
       - run:
           name: Run migrations
           command: |
@@ -207,7 +214,8 @@ jobs:
             then
               curl https://kvdb.io/5nEKX4jNex32hwPoWi2kUQ/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
-      - destroy-environment      
+      - destroy-environment  
+      - revert-migrations    
 
 #   deploy-frontend:
 #     docker:

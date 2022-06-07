@@ -14,7 +14,7 @@ commands:
           command: |
             aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.WorkflowID >>
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.WorkflowID >>
-            aws s3 rm s3://udapeople-<< arameters.WorkflowID >> --recursive
+            aws s3 rm s3://udapeople-<< parameters.WorkflowID >> --recursive
   # revert-migrations:
   #   description: Revert the last migration if successfully run in the current workflow.
   #   parameters:

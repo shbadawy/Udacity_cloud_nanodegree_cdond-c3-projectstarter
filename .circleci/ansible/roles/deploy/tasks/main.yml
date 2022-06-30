@@ -1,27 +1,26 @@
 ---
-
-- name: "Create directory"
-  file:
-    path: ~/be-app
-    state: directory
+  - name: "Create directory"
+    file:
+      path: ~/be-app
+      state: directory
     
-- name: "extract artifact"
-  unarchive:
-    src: artifact.tar.gz
-    dest: ~/be-app
+  - name: "extract artifact"
+    unarchive:
+      src: artifact.tar.gz
+      dest: ~/be-app
     
-- name: "install dependencies"
-  shell: |
-    cd ~/be-app
-    npm i
+  - name: "install dependencies"
+    shell: |
+      cd ~/be-app
+      npm i
     
-- name: "Executing with pm2"
-  shell: |
-    cd ~/be-app/dist
-    pm2 stop default
-    pm2 start main.js
+  - name: "Executing with pm2"
+    shell: |
+      cd ~/be-app/dist
+      pm2 stop default
+      pm2 start main.js
     
-- name: "start service"
-  become: true
-  shell: |
-    env PATH=$PATH:/usr/local/bin pm2 startup systemd -u ubuntu --hp /home/ubuntu
+  - name: "start service"
+    become: true
+    shell: |
+      env PATH=$PATH:/usr/local/bin pm2 startup systemd -u ubuntu --hp /home/ubuntu

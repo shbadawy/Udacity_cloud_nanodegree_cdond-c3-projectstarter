@@ -266,7 +266,7 @@ jobs:
                     
   deploy-backend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/base:stable
     steps:
       - checkout
       - install_awscli
@@ -278,7 +278,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            sudo apt-get install -y tar gzip
+            sudo apt-get install -y tar gzip nodejs
       - run:
           name: Deploy backend
           command: |

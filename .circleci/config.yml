@@ -129,7 +129,6 @@ jobs:
           command: |
             cd frontend
             npm install
-            # npm install oauth-sign@^0.9.0
             npm audit fix --audit-level=critical
 
   scan-backend:
@@ -144,7 +143,6 @@ jobs:
           command: |
             cd backend
             npm install
-            # npm install oauth-sign@^0.9.0
             npm audit fix --audit-level=critical
 
   deploy-infrastructure:
@@ -288,7 +286,10 @@ jobs:
             cd ..
             # Zip the directory
             tar -C backend -czvf artifact.tar.gz .
+            mkdir -p .circleci/ansible/roles/deploy/files
+            cp artifact.tar.gz .circleci/ansible/roles/deploy/files/
             cd .circleci/ansible
+            ls .circleci/ansible/roles/deploy/files
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
             export ANSIBLE_HOST_KEY_CHECKING=False

@@ -3,6 +3,11 @@
     file:
       path: ~/be-app
       state: directory
+      
+  - name: "Copy artifact"
+    copy:
+      src: artifact.tar.gz
+      dest: ~/be-app
     
   - name: "extract artifact"
     unarchive:

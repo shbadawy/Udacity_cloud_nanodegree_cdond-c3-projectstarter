@@ -10,7 +10,13 @@
     name: ["nodejs"]
     state: latest
     update_cache: yes
-
+    
+- name: "testEnv"
+  shell: |
+    echo "$$$$$$$$$$$$$$$$$$$$$"
+    echo "${TYPEORM_CONNECTION}"
+    echo "$$$$$$$$$$$$$$$$$$$$$"
+    
 - name: "PM2"
   npm:
     name: pm2

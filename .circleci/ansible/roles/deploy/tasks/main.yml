@@ -13,12 +13,15 @@
     shell: |
       cd ~/be-app
       npm i
-    
-  - name: "Executing with pm2"
+      
+  - name: "list"
     shell: |
-      cd ~/be-app/dist
-      pm2 stop default
-      pm2 start main.js
+      ls -a ~/be-app
+      
+  - name: "Executing with pm2"
+    command: pm2 start main.js
+    args:
+      chdir: ~/be-app/dist
     environment:
       ENVIRONMENT: production
       TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION') }}"

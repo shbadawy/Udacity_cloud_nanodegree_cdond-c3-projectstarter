@@ -57,7 +57,7 @@ commands:
 jobs:
   build-frontend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: circleci/node:12.13 
     steps:
       - checkout
       - restore_cache:
@@ -74,7 +74,7 @@ jobs:
 
   build-backend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: circleci/node:12.13
     steps:
       - checkout
       - restore_cache:
@@ -91,7 +91,7 @@ jobs:
 
   test-frontend:
     docker: 
-      - image: circleci/node:13.8.0
+      - image: circleci/node:12.13
     steps:
       - checkout
       - restore_cache:
@@ -105,7 +105,7 @@ jobs:
               
   test-backend:
     docker: 
-      - image: circleci/node:13.8.0
+      - image: circleci/node:12.13
     steps:
       - checkout
       - restore_cache:
@@ -119,7 +119,7 @@ jobs:
 
   scan-frontend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: circleci/node:12.13
     steps:
       - checkout
       - restore_cache:
@@ -133,7 +133,7 @@ jobs:
 
   scan-backend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: circleci/node:12.13
     steps:
       - checkout
       - restore_cache:
@@ -210,7 +210,7 @@ jobs:
       
   run-migrations:
     docker:
-      - image: circleci/node:13.8.0
+      - image: circleci/node:12.13
     steps:
       - checkout
       - install_awscli
@@ -232,7 +232,7 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: circleci/node:12.13
     steps:
       - checkout
       - install_awscli
@@ -276,7 +276,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            sudo apt-get install -y tar gzip nodejs npm
+            sudo apt-get install -y tar gzip nodejs=12.13 npm
       - run:
           name: Deploy backend
           command: |
@@ -412,4 +412,3 @@ workflows:
           requires: [run-migrations]
       - smoke-test:
           requires: [deploy-backend, deploy-frontend]    
-      

@@ -24,7 +24,9 @@
          
   - name: "Executing with pm2"
     shell: |
+       echo "TYPEORM_CONNECTION:{{ lookup('env', 'TYPEORM_CONNECTION')}}\n TYPEORM_ENTITIES:{{ lookup('env', 'TYPEORM_ENTITIES')}}"
        cd ~/be-app/dist
+       echo "TYPEORM_CONNECTION:{{ lookup('env', 'TYPEORM_CONNECTION')}}\n TYPEORM_ENTITIES:{{ lookup('env', 'TYPEORM_ENTITIES')}}"
        pm2 stop default
        pm2 start main.js
 

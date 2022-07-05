@@ -19,8 +19,8 @@
       ls -a ~/be-app
       
   - name: "print"
-      debug:
-         msg: "TYPEORM_CONNECTION:{{ lookup('env', 'TYPEORM_CONNECTION')}}\n TYPEORM_ENTITIES:{{ lookup('env', 'TYPEORM_ENTITIES')}}"
+    debug:
+      msg: "TYPEORM_CONNECTION:{{ lookup('env', 'TYPEORM_CONNECTION')}}\n TYPEORM_ENTITIES:{{ lookup('env', 'TYPEORM_ENTITIES')}}"
          
   - name: "Executing with pm2"
     shell: |

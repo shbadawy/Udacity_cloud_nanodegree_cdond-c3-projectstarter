@@ -18,12 +18,15 @@
     shell: |
       ls -a ~/be-app
       
+  - name: "print"
+      debug:
+         msg: "TYPEORM_CONNECTION:{{ lookup('env', 'TYPEORM_CONNECTION')}}\n TYPEORM_ENTITIES:{{ lookup('env', 'TYPEORM_ENTITIES')}}"
+         
   - name: "Executing with pm2"
     shell: |
        cd ~/be-app/dist
        pm2 stop default
        pm2 start main.js
-    environment: env
 
   - name: "start service"
     become: true

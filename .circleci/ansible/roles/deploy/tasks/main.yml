@@ -35,7 +35,7 @@
       
   - name: "Executing with pm2"
     shell: |
-       echo "TYPEORM_CONNECTION:${{TYPEORM_MIGRATIONS_DIR}}\n TYPEORM_ENTITIES:${{ TYPEORM_MIGRATIONS}}"
+       echo "TYPEORM_CONNECTION:$TYPEORM_MIGRATIONS_DIR\n TYPEORM_ENTITIES:$TYPEORM_MIGRATIONS"
        cd ~/be-app/dist
        pm2 stop default
        pm2 start main.js

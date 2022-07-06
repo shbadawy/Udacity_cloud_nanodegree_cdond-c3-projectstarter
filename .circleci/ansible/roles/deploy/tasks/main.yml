@@ -14,31 +14,13 @@
       cd ~/be-app
       npm i
       
-  - name: "list"
-    shell: |
-      ls -a ~/be-app
-      
-  - name: "print"
-    debug:
-      msg: "Loacation: ${{playbook_dir}}\n location2: ${{inventory_dir}}\n TYPEORM_CONNECTION:{{ lookup('env', 'TYPEORM_CONNECTION')}}\n TYPEORM_ENTITIES:{{ lookup('env', 'TYPEORM_ENTITIES')}}"
-
-  - name: "Executing with test"
-    shell: |
-       echo "TYPEORM_CONNECTION:{{ lookup('env', 'TYPEORM_CONNECTION')}}\n TYPEORM_ENTITIES:{{ lookup('env', 'TYPEORM_ENTITIES')}}"
-       cd ~/be-app/dist
-       echo "TYPEORM_CONNECTION:{{ lookup('env', 'TYPEORM_CONNECTION')}}\n TYPEORM_ENTITIES:{{ lookup('env', 'TYPEORM_ENTITIES')}}"
-    register: command_output  
-    
-  - name: "print22222"
-    debug:
-      var: command_output.stdout_lines
-      
   - name: "Executing with pm2"
     shell: |
        echo "TYPEORM_CONNECTION:$TYPEORM_MIGRATIONS_DIR\n TYPEORM_ENTITIES:$TYPEORM_MIGRATIONS"
        cd ~/be-app/dist
        pm2 stop default
        pm2 start main.js
+    register: command_output 
     environment:
       - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION')}}"
       - TYPEORM_HOST: "{{ lookup('env', 'TYPEORM_HOST')}}"
@@ -49,7 +31,11 @@
       - TYPEORM_MIGRATIONS_DIR: "./migrations"
       - TYPEORM_MIGRATIONS: "./migrations/*.js"
       - TYPEORM_ENTITIES: "./modules/domain/**/*.entity.js"
-
+  
+  - name: "print22222"
+    debug:
+      var: command_output.stdout_lines
+      
   - name: "start service"
     become: true
     shell: |

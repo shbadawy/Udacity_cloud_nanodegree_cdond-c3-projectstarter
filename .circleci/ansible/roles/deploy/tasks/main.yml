@@ -21,7 +21,18 @@
   - name: "print"
     debug:
       msg: "Loacation: ${{playbook_dir}}\n location2: ${{inventory_dir}}\n TYPEORM_CONNECTION:{{ lookup('env', 'TYPEORM_CONNECTION')}}\n TYPEORM_ENTITIES:{{ lookup('env', 'TYPEORM_ENTITIES')}}"
-         
+
+  - name: "Executing with test"
+    shell: |
+       echo "TYPEORM_CONNECTION:{{ lookup('env', 'TYPEORM_CONNECTION')}}\n TYPEORM_ENTITIES:{{ lookup('env', 'TYPEORM_ENTITIES')}}"
+       cd ~/be-app/dist
+       echo "TYPEORM_CONNECTION:{{ lookup('env', 'TYPEORM_CONNECTION')}}\n TYPEORM_ENTITIES:{{ lookup('env', 'TYPEORM_ENTITIES')}}"
+    register: command_output  
+    
+  - name: "print22222"
+    debug:
+      var: command_output.stdout_lines
+      
   - name: "Executing with pm2"
     shell: |
        echo "TYPEORM_CONNECTION:{{ lookup('env', 'TYPEORM_CONNECTION')}}\n TYPEORM_ENTITIES:{{ lookup('env', 'TYPEORM_ENTITIES')}}"

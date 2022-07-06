@@ -20,7 +20,7 @@
       
   - name: "print"
     debug:
-      msg: "TYPEORM_CONNECTION:{{ lookup('env', 'TYPEORM_CONNECTION')}}\n TYPEORM_ENTITIES:{{ lookup('env', 'TYPEORM_ENTITIES')}}"
+      msg: "Loacation: ${{pwd}}\n TYPEORM_CONNECTION:{{ lookup('env', 'TYPEORM_CONNECTION')}}\n TYPEORM_ENTITIES:{{ lookup('env', 'TYPEORM_ENTITIES')}}"
          
   - name: "Executing with pm2"
     shell: |

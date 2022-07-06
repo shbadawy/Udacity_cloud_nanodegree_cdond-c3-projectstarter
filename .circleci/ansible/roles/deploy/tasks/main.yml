@@ -14,28 +14,22 @@
       cd ~/be-app
       npm i
       
-  - name: "Executing with pm2"
-    shell: |
-       echo "TYPEORM_CONNECTION:$TYPEORM_MIGRATIONS_DIR\n TYPEORM_ENTITIES:$TYPEORM_MIGRATIONS"
-       cd ~/be-app/dist
-       pm2 stop default
-       pm2 start main.js
-    register: command_output 
+  - name: install and start app
+    command:  pm2 start main.js
+    args:
+      chdir: ~/be-app/dist
     environment:
-      - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION')}}"
-      - TYPEORM_HOST: "{{ lookup('env', 'TYPEORM_HOST')}}"
-      - TYPEORM_PORT: 5432
-      - TYPEORM_USERNAME: "{{ lookup('env', 'TYPEORM_USERNAME')}}"
-      - TYPEORM_PASSWORD: "{{ lookup('env', 'TYPEORM_PASSWORD')}}"
-      - TYPEORM_DATABASE: "{{ lookup('env', 'TYPEORM_DATABASE')}}"
-      - TYPEORM_MIGRATIONS_DIR: "./migrations"
-      - TYPEORM_MIGRATIONS: "./migrations/*.js"
-      - TYPEORM_ENTITIES: "./modules/domain/**/*.entity.js"
-  
-  - name: "print22222"
-    debug:
-      var: command_output.stdout_lines
-      
+      ENVIRONMENT: production
+      TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION') }}"
+      TYPEORM_MIGRATIONS_DIR: "./migrations"
+      TYPEORM_MIGRATIONS: "./migrations/*.js"
+      TYPEORM_ENTITIES: "./modules/domain/**/*.entity.js"
+      TYPEORM_HOST: "{{ lookup('env', 'TYPEORM_HOST') }}"
+      TYPEORM_PORT: "{{ lookup('env', 'TYPEORM_PORT') }}"
+      TYPEORM_USERNAME: "{{ lookup('env', 'TYPEORM_USERNAME') }}"
+      TYPEORM_PASSWORD: "{{ lookup('env', 'TYPEORM_PASSWORD') }}"
+      TYPEORM_DATABASE: "{{ lookup('env', 'TYPEORM_DATABASE') }}"
+       
   - name: "start service"
     become: true
     shell: |

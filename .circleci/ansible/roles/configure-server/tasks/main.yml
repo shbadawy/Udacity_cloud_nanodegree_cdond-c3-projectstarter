@@ -16,7 +16,12 @@
     echo "$$$$$$$$$$$$$$$$$$$$$"
     echo "${TYPEORM_CONNECTION}"
     echo "$$$$$$$$$$$$$$$$$$$$$"
-    
+  register: command_output
+
+ - name: "print22222"
+   debug:
+     var: command_output.stdout_lines
+       
 - name: "PM2"
   npm:
     name: pm2

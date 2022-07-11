@@ -13,9 +13,9 @@
     
 - name: "testEnv"
   shell: |
-    echo "$$$$$$$$$$$$$$$$$$$$$"
+    set -o xtrace
+    echo "aaaaaaa"
     echo "${TYPEORM_CONNECTION}"
-    echo "$$$$$$$$$$$$$$$$$$$$$"
   register: command_output
 
 - name: "print22222"

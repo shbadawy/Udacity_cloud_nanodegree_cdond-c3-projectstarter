@@ -13,9 +13,12 @@
     
 - name: "testEnv"
   shell: |
-    set -o xtrace
+    set -o nounset
+    set -o errexit
+    set -o xtrace    
     echo "aaaaaaa"
     echo "${TYPEORM_CONNECTION}"
+    echo "${a1}"
   register: command_output
 
 - name: "print22222"

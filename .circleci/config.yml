@@ -35,6 +35,7 @@ commands:
             aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.WorkflowID >>
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.WorkflowID >>
             aws s3 rm s3://udapeople-<< parameters.WorkflowID >> --recursive
+            
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
@@ -303,7 +304,6 @@ jobs:
       - image: alpine
     steps:
       - checkout
-      #- install_awscli
       - restore_cache:
           keys: [backend-build]
       - run:
@@ -344,11 +344,11 @@ jobs:
             if curl -s ${URL} | grep "Welcome"
             then
               # Change this to 0 after the job fails
-              return 1
+              return 0
             else
               return 1
             fi
-      # - destroy-environment  
+      - destroy-environment  
       - revert-migrations
 
 #   cloudfront-update:

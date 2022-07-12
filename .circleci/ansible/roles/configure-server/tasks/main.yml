@@ -10,17 +10,6 @@
     name: ["nodejs"]
     state: latest
     update_cache: yes
-    
-- name: "testEnv"
-  shell: |   
-    echo "aaaaaaa"
-    echo "$TYPEORM_CONNECTION"
-    echo "$a1"
-  register: command_output
-
-- name: "print22222"
-  debug:
-    var: command_output.stdout_lines
        
 - name: "PM2"
   npm:

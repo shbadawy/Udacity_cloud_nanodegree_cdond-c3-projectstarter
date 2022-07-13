@@ -358,10 +358,6 @@ jobs:
       - checkout
       - install_awscli
       - run:
-          name: Install dependencies
-          command: |
-            # your code here
-      - run:
           name: Update cloudfront distribution
           command: |
             aws cloudformation deploy \
@@ -372,57 +368,32 @@ jobs:
       # Here's where you will add some code to rollback on failure  
       - destroy-environment  
       - revert-migrations
-docker:
-      
-    steps:
-      
-      - add_ssh_keys:
-          fingerprints: ["5e:60:55:3e:08:ef:9c:8d:2d:ed:f3:79:3a:87:34:25"]
-      - attach_workspace:
-          at: ~/
-      - run:
-          name: Install dependencies
-          command: |
-            sudo apt-get install -y tar gzip
-            sudo apt-get install -y nodejs npm
-      - run:
-          name: Deploy backend
-          command: |
-            cd backend
-            npm i
-            npm run build
-            cd ..
-            # Zip the directory
-            tar -C backend -czvf artifact.tar.gz .
-            mkdir -p .circleci/ansible/roles/deploy/files
-            cp artifact.tar.gz .circleci/ansible/roles/deploy/files/
-            cd .circleci/ansible
-            ls roles/deploy/files
-            echo "Contents  of the inventory.txt file is -------"
-            cat inventory.txt
-            export ANSIBLE_HOST_KEY_CHECKING=False
-            ansible-playbook -i inventory.txt deploy-backend.yml
-      - destroy-environment  
-      - revert-migrations 
-
-# cleanup:
-#   docker:
-#     # Docker image here
-#   steps:
-#     # Checkout code from git
-#     - run:
-#         name: Get old stack workflow id
-#         command: |
-#           # your code here
-#           export OldWorkflowID="the id here"
-#           export STACKS=[] #put the list of stacks here
-#     - run:
-#         name: Remove old stacks and files
-#         command: |
-#           if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
-#           then
-#             # your code here
-#           fi
+cleanup:
+  docker:
+    - image: cimg/base:stable
+  steps:
+    - checkout
+    - install_awscli
+    - run:
+        name: Get old stack workflow id
+        command: |
+          # Fetch the Old workflow ID
+          export OldWorkflowID=$(aws cloudformation list-exports --query "Exports[?Name==\`WorkflowID\`].Value" --no-paginate --output text)
+          echo OldWorkflowID: "${OldWorkflowID}"
+          echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
+          # Fetch the stack names          
+          export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
+          --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
+          echo Stack names: "${STACKS[@]}"
+    - run:
+        name: Remove old stacks and files
+        command: |
+          if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
+          then
+            aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
+            aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
+            aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
+          fi
 
 workflows:
   default:
@@ -454,4 +425,7 @@ workflows:
           requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
+      - cleanup:
+          requires: [cloudfront-update]
+      
       

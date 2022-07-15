@@ -389,8 +389,8 @@ jobs:
           name: Remove old stacks and files
           command: |
             echo "${OldWorkflowID} - ${STACKS[@]}"
-            chmod +x project/.circleci/files/cleanStacks.sh
-            ./project/.circleci/files/cleanStacks.sh "${OldWorkflowID}" "${STACKS[@]}"
+            chmod +x .circleci/files/cleanStacks.sh
+            ./.circleci/files/cleanStacks.sh "${OldWorkflowID}" "${STACKS[@]}"
 
 workflows:
   default:

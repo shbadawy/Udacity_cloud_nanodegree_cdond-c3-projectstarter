@@ -388,21 +388,27 @@ jobs:
       - run:
           name: Remove old stacks and files
           command: |
-            if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
-            then
-              echo "Keeping ${STACKS[@]} because equal"
-            elif [ "${STACKS[@]}" =~ "productionStack" ] || [ "${STACKS[@]}" =~ "InitialStack"]
-            then
-              echo "Keeping ${STACKS[@]} because production or initial stack"
-            else
-              echo "Deleting ${STACKS[@]}"
+            for stack in $STACKS
+            do
+              if [[ $stack =~ "a412949" ]]
+              then
+                echo "Keeping $stack because equal"
+              elif [[ $stack =~ "production" ]]
+              then
+                echo "Keeping $stack because production stack"
+              elif [[ $stack =~ "Initial" ]]
+              then
+                echo "Keeping $stack because initial stack"
+              else
+                echo "Deleting $stack"
               # aws s3 rm "s3://${STACKS[@]}" --recursive
               # aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
               # aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
-            fi
+              fi
+            done
 
 workflows:
-  default: 
+  default:
     jobs:
       - build-frontend
       - build-backend

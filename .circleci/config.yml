@@ -385,8 +385,9 @@ jobs:
             export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
             --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
             echo Stack names: "${STACKS[@]}"
+            # Delete old stacks
             chmod +x .circleci/files/cleanStacks.sh
-            ./.circleci/files/cleanStacks.sh "${OldWorkflowID}" "${STACKS[@]}"
+            ./.circleci/files/cleanStacks.sh "${CIRCLE_WORKFLOW_ID:0:7}" "${STACKS[@]}"
             
 workflows:
   default:

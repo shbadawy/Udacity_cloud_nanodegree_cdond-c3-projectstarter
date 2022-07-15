@@ -3,7 +3,7 @@ STACKS=$@
 echo "flowID: $flowID"
 echo "STACKS: $STACKS"
 
-for stack in $STACKS[@]
+for stack in $STACKS
 do
 BUCKETNAME=${stack: -7}
 echo "BUCKETNAME: $BUCKETNAME"
@@ -19,7 +19,7 @@ then
 else
   echo "Deleting $stack"
   echo "URL: s3://udapeople-$BUCKETNAME"
-  aws s3 rm "s3://udapeople-$BUCKETNAME" --recursive
+  aws s3 rb "s3://udapeople-$BUCKETNAME" --force
   aws cloudformation delete-stack --stack-name "udapeople-backend-$flowID"
   aws cloudformation delete-stack --stack-name "udapeople-frontend-$flowID"
 fi

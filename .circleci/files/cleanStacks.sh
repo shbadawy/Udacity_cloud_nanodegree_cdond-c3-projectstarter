@@ -16,8 +16,8 @@ then
   echo "Keeping $stack because initial stack"
 else
   echo "Deleting $stack"
-              # aws s3 rm "s3://${STACKS[@]}" --recursive
-              # aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
-              # aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
+  aws s3 rm "s3://$stack" --recursive
+  aws cloudformation delete-stack --stack-name "udapeople-backend-$flowID"
+  aws cloudformation delete-stack --stack-name "udapeople-frontend-$flowID"
 fi
 done

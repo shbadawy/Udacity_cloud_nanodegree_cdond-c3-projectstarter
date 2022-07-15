@@ -390,10 +390,10 @@ jobs:
           command: |
             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
             then
-              echo "Keeping ${STACKS[@]}"
-            elif [ "${STACKS[@]}" = "productionStack" ] || [ "${STACKS[@]}" = "InitialStack"]
+              echo "Keeping ${STACKS[@]} because equal"
+            elif [[ "${STACKS[@]}" = "productionStack" ] || [ "${STACKS[@]}" = "InitialStack"]]
             then
-              echo "Keeping ${STACKS[@]}"
+              echo "Keeping ${STACKS[@]} because production or initial stack"
             else
               echo "Deleting ${STACKS[@]}"
               # aws s3 rm "s3://${STACKS[@]}" --recursive

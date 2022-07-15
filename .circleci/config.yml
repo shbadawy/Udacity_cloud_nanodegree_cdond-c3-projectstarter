@@ -388,7 +388,7 @@ jobs:
       - run:
           name: Remove old stacks and files
           command: |
-            for stack in $STACKS
+            for stack in $STACKS[@]
             do
               if [[ $stack =~ "a412949" ]]
               then

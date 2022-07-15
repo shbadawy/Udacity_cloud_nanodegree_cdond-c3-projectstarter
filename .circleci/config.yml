@@ -61,8 +61,8 @@ jobs:
       - image: circleci/node:12.13 
     steps:
       - checkout
-      - restore_cache:
-          keys: [frontend-build]
+#       - restore_cache:
+#           keys: [frontend-build]
       - run:
           name: Build front-end
           command: |
@@ -78,8 +78,8 @@ jobs:
       - image: circleci/node:12.13
     steps:
       - checkout
-      - restore_cache:
-          keys: [backend-build]
+#       - restore_cache:
+#           keys: [backend-build]
       - run:
           name: Back-end build
           command: |
@@ -388,24 +388,9 @@ jobs:
       - run:
           name: Remove old stacks and files
           command: |
-            for stack in $STACKS[@]
-            do
-              if [[ $stack =~ "a412949" ]]
-              then
-                echo "Keeping $stack because equal"
-              elif [[ $stack =~ "production" ]]
-              then
-                echo "Keeping $stack because production stack"
-              elif [[ $stack =~ "Initial" ]]
-              then
-                echo "Keeping $stack because initial stack"
-              else
-                echo "Deleting $stack"
-              # aws s3 rm "s3://${STACKS[@]}" --recursive
-              # aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
-              # aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
-              fi
-            done
+            echo "${OldWorkflowID} - ${STACKS[@]}"
+            chmod +x project/.circleci/files/cleanStacks.sh
+            ./project/.circleci/files/cleanStacks.sh "${OldWorkflowID}" "${STACKS[@]}"
 
 workflows:
   default:

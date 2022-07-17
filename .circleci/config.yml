@@ -48,7 +48,8 @@ commands:
           when: on_fail
           command: |
             SUCCESS=$(curl --insecure https://kvdb.io/${KVDB_BUCKET}/migration_<< parameters.WorkflowID >> -d '1')
-            if(( $SUCCESS=1 )); 
+            expected=1
+            if[ "$SUCCESS" = "$expected"  ]; 
             then
               cd ~/project/backend
               npm install
@@ -219,10 +220,6 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            npm config list
-            npm config delete proxy
-            npm config delete http-proxy
-            npm config delete https-proxy
             npm install
             npm run migrations > migrations_dump.txt
       - run:

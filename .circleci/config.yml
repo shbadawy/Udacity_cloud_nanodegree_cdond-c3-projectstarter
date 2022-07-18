@@ -209,6 +209,7 @@ jobs:
   run-migrations:
     docker:
       - image: circleci/node:13.8.0
+    
     steps:
       - checkout
       - restore_cache:
@@ -220,6 +221,11 @@ jobs:
             cd backend
             npm install
             npm run migrations > migrations_dump.txt
+            echo $TYPEORM_MIGRATIONS_DIR
+          environment:
+            TYPEORM_MIGRATIONS_DIR: "./src/migrations"
+            TYPEORM_MIGRATIONS: "./src/migrations/*.js"
+            TYPEORM_ENTITIES: "./src/modules/domain/**/*.entity.js"
       - run:
           name: Check migration logs
           command: |

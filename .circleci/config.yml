@@ -212,7 +212,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [backend-build]
+          keys: [backend-build,frontend-build]
 #       - install_awscli
       - run:
           name: Run migrations

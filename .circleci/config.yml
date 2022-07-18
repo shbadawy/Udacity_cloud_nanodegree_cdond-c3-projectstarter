@@ -59,11 +59,9 @@ commands:
 jobs:
   build-frontend:
     docker:
-      - image: circleci/node:12.13 
+      - image: circleci/node:13.8.0
     steps:
       - checkout
-#       - restore_cache:
-#           keys: [frontend-build]
       - run:
           name: Build front-end
           command: |
@@ -76,11 +74,9 @@ jobs:
 
   build-backend:
     docker:
-      - image: circleci/node:12.13
+      - image: circleci/node:13.8.0
     steps:
       - checkout
-#       - restore_cache:
-#           keys: [backend-build]
       - run:
           name: Back-end build
           command: |
@@ -93,7 +89,7 @@ jobs:
 
   test-frontend:
     docker: 
-      - image: circleci/node:12.13
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -107,7 +103,7 @@ jobs:
               
   test-backend:
     docker: 
-      - image: circleci/node:12.13
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -121,7 +117,7 @@ jobs:
 
   scan-frontend:
     docker:
-      - image: circleci/node:12.13
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -135,7 +131,7 @@ jobs:
 
   scan-backend:
     docker:
-      - image: circleci/node:12.13
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -212,10 +208,10 @@ jobs:
       
   run-migrations:
     docker:
-      - image: circleci/node:12.13
+      - image: circleci/node:13.8.0
     steps:
       - checkout
-      - install_awscli
+#       - install_awscli
       - run:
           name: Run migrations
           command: |
@@ -234,7 +230,7 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: circleci/node:12.13
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - install_awscli

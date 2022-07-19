@@ -223,9 +223,9 @@ jobs:
             npm run migrations > migrations_dump.txt
             echo $TYPEORM_MIGRATIONS_DIR
           environment:
-            TYPEORM_MIGRATIONS_DIR: "./src/migrations"
-            TYPEORM_MIGRATIONS: "./src/migrations/*.js"
-            TYPEORM_ENTITIES: "./src/modules/domain/**/*.entity{.ts,.js}"
+            TYPEORM_MIGRATIONS_DIR: './src/migrations'
+            TYPEORM_MIGRATIONS: './src/migrations/*.js'
+            TYPEORM_ENTITIES: './src/modules/domain/**/*.entity{.ts,.js}'
       - run:
           name: Check migration logs
           command: |

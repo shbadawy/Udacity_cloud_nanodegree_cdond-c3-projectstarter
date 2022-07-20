@@ -63,7 +63,7 @@ commands:
           name: install node
           command: |
             sudo apt-get -y update
-            curl -fsSL https://deb.nodesource.com/setup_13.x | sudo -E bash -
+            curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
             sudo apt-get install -y nodejs
 
 jobs:

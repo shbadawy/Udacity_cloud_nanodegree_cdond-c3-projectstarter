@@ -56,12 +56,23 @@ commands:
               npm run migration:revert
             fi
 
+  install_node:
+    description: Add node
+    steps:
+      - run:
+          name: install node
+          command: |
+            sudo apt-get -y update
+            curl -fsSL https://deb.nodesource.com/setup_13.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+
 jobs:
   build-frontend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/base:stable
     steps:
       - checkout
+      - install_node
       - run:
           name: Build front-end
           command: |
@@ -74,9 +85,10 @@ jobs:
 
   build-backend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/base:stable
     steps:
       - checkout
+      - install_node
       - run:
           name: Back-end build
           command: |
@@ -89,9 +101,10 @@ jobs:
 
   test-frontend:
     docker: 
-      - image: circleci/node:13.8.0
+      - image: cimg/base:stable
     steps:
       - checkout
+      - install_node
       - restore_cache:
           keys: [frontend-build]
       - run:
@@ -103,9 +116,10 @@ jobs:
               
   test-backend:
     docker: 
-      - image: circleci/node:13.8.0
+      - image: cimg/base:stable
     steps:
       - checkout
+      - install_node
       - restore_cache:
           keys: [backend-build]
       - run:
@@ -117,9 +131,10 @@ jobs:
 
   scan-frontend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/base:stable
     steps:
       - checkout
+      - install_node
       - restore_cache:
           keys: [frontend-build]
       - run:
@@ -131,9 +146,10 @@ jobs:
 
   scan-backend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/base:stable
     steps:
       - checkout
+      - install_node
       - restore_cache:
           keys: [backend-build]
       - run:
@@ -208,13 +224,12 @@ jobs:
       
   run-migrations:
     docker:
-      - image: circleci/node:13.8.0
-    
+      - image: cimg/base:stable
     steps:
       - checkout
+      - install_node
       - restore_cache:
           keys: [backend-build,frontend-build]
-#       - install_awscli
       - run:
           name: Run migrations
           command: |
@@ -243,10 +258,11 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/base:stable
     steps:
       - checkout
       - install_awscli
+      - install_node
       - restore_cache:
           keys: [frontend-build]
       - run:
@@ -378,6 +394,7 @@ jobs:
       # Here's where you will add some code to rollback on failure  
       - destroy-environment  
       - revert-migrations
+  
   cleanup:
     docker:
       - image: cimg/base:stable
@@ -452,4 +469,3 @@ workflows:
           filters:
             branches:
               only: [master]
-    

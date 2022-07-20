@@ -57,12 +57,13 @@ commands:
             fi
 
   install_node:
-  steps:
-    - run:
-        name: install node
-        command: |
-          curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
-          sudo apt-get insatll -y nodejs
+    description: Add node
+    steps:
+      - run:
+          name: install node
+          command: |
+            curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+            sudo apt-get insatll -y nodejs
 
 jobs:
   build-frontend:
